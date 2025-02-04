@@ -1,17 +1,19 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 import { AppDispatch, RootState } from "../store/store";
 import { loadCartFromStorage } from "../store/cartSlice";
 import { filterProducts, setSearchQuery } from "../store/productSlice";
-import { Search, ShoppingCart } from "lucide-react";
+import { Loader, Search, ShoppingCart } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export const Header = () => {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
+  const [search, setSearch] = useState("");
+  const [isPending, startTransition] = useTransition();
   const cartItems = useSelector((state: RootState) => state.cart.items);
 
   useEffect(() => {
@@ -19,8 +21,11 @@ export const Header = () => {
   }, [dispatch]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setSearchQuery(e.target.value));
-    dispatch(filterProducts());
+    setSearch(e.target.value);
+    startTransition(() => {
+      dispatch(setSearchQuery(e.target.value));
+      dispatch(filterProducts());
+    });
   };
 
   const onFocusInput = () => {
@@ -38,11 +43,16 @@ export const Header = () => {
           name="search"
           id="search"
           onFocus={onFocusInput}
+          value={search}
           placeholder="Search products..."
           onChange={handleSearchChange}
           className="pl-10 pr-4 py-2 rounded bg-gray-700 text-white focus:outline-none"
         />
-        <Search className="absolute left-3 text-gray-400" />
+        {isPending ? (
+          <Loader className="absolute left-3 text-gray-400" />
+        ) : (
+          <Search className="absolute left-3 text-gray-400" />
+        )}
       </div>
       <Link href="/cart">
         <div className="relative">
