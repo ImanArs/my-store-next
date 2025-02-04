@@ -7,7 +7,6 @@ export const CartForm = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
     console.log("Address:", address);
     console.log("City:", city);
     console.log("Postal Code:", postalCode);

@@ -25,24 +25,24 @@ export const CartTable = () => {
     <div className="w-full lg:max-w-[600px] border px-5">
       <Table dataSource={cartItems}>
         <Column
-          title="Картинка"
+          title="image"
           dataIndex="image"
           render={(value) => (
             <Image src={value} width={80} height={80} alt="Product image" />
           )}
         />
         <Column
-          title="Название"
+          title="title"
           dataIndex="title"
           render={(value) => <span className="w-[300px]">{value}</span>}
         />
         <Column
-          title="Количество"
+          title="quantity"
           dataIndex="quantity"
           render={(value) => <span>{value}</span>}
         />
         <Column
-          title="Цена"
+          title="price"
           dataIndex="price"
           render={(value) => {
             const priceInCurrency = exchangeRates
@@ -56,7 +56,7 @@ export const CartTable = () => {
           }}
         />
         <Column
-          title="Удалить"
+          title="delete"
           dataIndex="id"
           render={(value) => (
             <button
